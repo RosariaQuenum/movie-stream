@@ -33,3 +33,12 @@ jobs:
           sudo apt-get update
           sudo apt-get install trivy -y
           #command to scan files
+      - name: Docker build and push
+        run: |
+            #run commands to build and push docker images
+            docker build --build-arg TMDB_V3_API_KEY=5aba853d8668e3c43e069096a7e0d436 -t movie-stream .
+            docker tag movie-stream rosariaquenum/movie-stream:latest
+            docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN }}
+            docker push rosariaquenum/movie-stream:latest  
+        env:
+            DOCKER_CLI_ACI: 1
