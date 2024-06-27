@@ -42,3 +42,13 @@ jobs:
             docker push rosariaquenum/movie-stream:latest  
         env:
             DOCKER_CLI_ACI: 1
+  deploy:    
+    needs: build 
+    runs-on: [self-hosted]  
+    steps:
+      - name: Pull the docker image
+        run: docker pull rosariaquenum/movie-stream:latest
+      - name: Trivy image scan
+        run: trivy image rosariaquenum/movie-stream:latest
+      - name: Run the container movie-stream
+        run: docker run -d --name movie-stream -p 8081:80 rosariaquenum/movie-stream:latest
